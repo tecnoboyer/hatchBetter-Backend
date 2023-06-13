@@ -10,18 +10,18 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-            auth:       '/api/auth',
+            home:       '/api',
         }
 
 
         // Data base connection
         this.conectarDB();
 
-        // Middlewares
-        this.middlewares();
+        // // Middlewares
+        // this.middlewares();
 
-        // // Routes
-        // this.routes();
+        // Routes
+        this.app.use( this.paths.home, require('../routes/hellow'));
     }
 
     async conectarDB() {
