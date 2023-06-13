@@ -10,7 +10,8 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-            home:       '/api',
+            home:  '/api',
+            add:   '/api/adminTask',
         }
 
 
@@ -18,10 +19,11 @@ class Server {
         this.conectarDB();
 
         // // Middlewares
-        // this.middlewares();
+        this.middlewares();
 
         // Routes
         this.app.use( this.paths.home, require('../routes/hellow'));
+        this.app.use( this.paths.add, require('../routes/tasks'));
     }
 
     async conectarDB() {
@@ -37,8 +39,7 @@ class Server {
         // Keeping json in body
         this.app.use( express.json() );
 
-        // mOMENTANEO
-        this.app.use( express.static('public') );
+        this.app.use(express.urlencoded({ extended: false }));
 
     }
 
