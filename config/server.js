@@ -10,8 +10,8 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-            home:       '/api',
-            add:       '/api/addTask',
+            home:  '/api',
+            add:   '/api/adminTask',
         }
 
 
@@ -39,8 +39,6 @@ class Server {
         // Keeping json in body
         this.app.use( express.json() );
 
-        // mOMENTANEO
-        // this.app.use( express.static('public') );
         this.app.use(express.urlencoded({ extended: false }));
 
     }

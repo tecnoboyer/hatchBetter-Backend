@@ -5,9 +5,12 @@ const { check } = require('express-validator');
 const router = Router();
 const { 
     tasksPost,
-    tasksPut } = require('../controllers/tasks');
+    tasksGet,
+    tasksDelete } = require('../controllers/tasks');
 
 router.post('/', tasksPost );
+router.get('/', tasksGet );
+router.delete('/', tasksDelete );
 
 // router.put('/:id',tasksPut );
 
