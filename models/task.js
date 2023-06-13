@@ -1,7 +1,8 @@
 
 const { Schema, model } = require('mongoose');
 
-const TaskSchema = Schema({
+const TaskSchema = Schema(
+{
     description: {
         type: String,
         required: [true, 'Description is mandatory']
@@ -10,9 +11,10 @@ const TaskSchema = Schema({
         type: Boolean,
 
     },
+},
     { timestamps: true }
     
-});
+);
 
 
 
