@@ -22,7 +22,7 @@ class Server {
         this.app.use( this.paths.add, require('../routes/tasks'));
     }
 
-    async conectarDB() {
+    async conectarDB() {            
         await dbConnection();
     }
 
