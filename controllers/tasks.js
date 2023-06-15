@@ -30,6 +30,7 @@ const tasksGet = async (req, res = response) => {
   try {
     const falseStatusTasks = await task.find({ status: false }).sort({ description: 1 }).exec(); //Are the ToDo
     const trueStatusTasks = await task.find({ status: true }) //Are the Done ones
+      .sort({ updatedAt: -1 }) 
       .sort({ description: 1 }) 
       .limit(10) 
       .exec();
