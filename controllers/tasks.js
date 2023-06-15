@@ -1,5 +1,4 @@
 const { response, request } = require('express');
-
 const Task = require('../models/task');
 const task = require('../models/task');
 
@@ -26,7 +25,7 @@ const tasksGet = async (req, res = response) => {
     const falseStatusTasks = await task.find({ status: false }).sort({ description: 1 }).exec(); //Are the ToDo
     const trueStatusTasks = await task.find({ status: true }) //Are the Done ones
       .sort({ description: 1 }) 
-      .limit(5) 
+      .limit(10) 
       .exec();
     const tasks = [...falseStatusTasks, ...trueStatusTasks];
     res.status(200).json({ tasks });
@@ -54,10 +53,46 @@ const tasksDelete = async(req, res = response) => {
       }
 }
 
+const tasksPut = async(req, res = response) => {
+  try {
+
+      const {_id,status} =req.body
+
+      Task.findByIdAndUpdate(
+        {_id:_id},
+        { status: !Boolean(status) },
+        { new: true } // This option returns the updated document instead of the original one
+      )
+        .then(updatedTask => {
+          if (updatedTask) {
+            console.log('Task updated:', updatedTask);
+            console.log('*   *   *');
+          } else {
+            console.log('Task not found');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating task:', error);
+        });
+
+      res.status(200).json({ message: 'Request processed successfully' });
+    } catch (error) {
+      // Handling of Mongoose validation error
+      if (error.name === 'ValidationError') {
+        const errors = Object.values(error.errors).map((err) => err.message);
+        return res.status(400).json({ errors });
+      }
+      res.status(500).json({ message: 'Task unloaded, check client request ' });
+    }
+
+}
+
 module.exports = {
     tasksPost,
     tasksGet,
-    tasksDelete
+    tasksDelete,
+    tasksPut,
+
 
 }
 
