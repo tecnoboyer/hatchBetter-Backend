@@ -1,7 +1,4 @@
-
 const { response, request } = require('express');
-
-
 const Task = require('../models/task');
 const task = require('../models/task');
 
@@ -28,7 +25,7 @@ const tasksGet = async (req, res = response) => {
     const falseStatusTasks = await task.find({ status: false }).sort({ description: 1 }).exec(); //Are the ToDo
     const trueStatusTasks = await task.find({ status: true }) //Are the Done ones
       .sort({ description: 1 }) 
-      .limit(5) 
+      .limit(10) 
       .exec();
     const tasks = [...falseStatusTasks, ...trueStatusTasks];
     res.status(200).json({ tasks });
