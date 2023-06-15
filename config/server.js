@@ -11,7 +11,7 @@ class Server {
         this.server = require('http').createServer(this.app);
         this.io = require('socket.io')(this.server, {
             cors: {
-              origin: '*', // Replace '*' with your frontend's URL or restrict it to a specific domain
+              origin: '*', // security issue
               methods: ['GET', 'POST','PUT','DELETE'],
               allowedHeaders: ['Content-Type'],
               credentials: true,
@@ -30,10 +30,13 @@ class Server {
         // Routes
         this.app.use( this.paths.add, require('../routes/tasks'));
 
+        const { tasksPost, tasksPut } = require('../controllers/tasks');
+
+        this.app.use(this.paths.add, (req, res) => tasksPost(req, res, this.io));
+        this.app.use(this.paths.add, (req, res) => tasksPut(req, res, this.io));
+
         //Sockets
         this.sockets();
-
-
 
     }
 
@@ -50,11 +53,22 @@ class Server {
     }
 
 
-    sockets(){
-        this.io.on('connection',socket =>{
-            console.log('Cliente conectado');
+    sockets() {
+      this.io.on('connection', (socket) => {
+        console.log('Client connected: ' + socket.id);
+    
+        // Send a message from the server to the client immediately after connection
+        socket.emit('message', 'Yes it is me');
+    
+        socket.on('message', (data) => {
+          console.log('ServerSide: message received:', data);
+    
+          // Emit the 'response' event to the client
+          socket.emit('response', 'mensajeDesdeElServer');
         });
+      });
     }
+      
 
 
     listen() {

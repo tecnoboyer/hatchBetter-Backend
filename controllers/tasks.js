@@ -1,12 +1,18 @@
 const { response, request } = require('express');
 const Task = require('../models/task');
 const task = require('../models/task');
+const { io } = require('../config/server');
 
-const tasksPost = async(req, res = response) => {
+const tasksPost = async(req, res = response,io) => {
     try {
+      console.dir( io); 
+        
+        // io.emit('message', 'New task created');
+        console.log('new post in progress...')
         const { description, status} = req.body;
         const task = new Task({ description, status });
-        await task.save();
+        const per_done=await task.save();
+        console.log(per_done);
 
         res.status(200).json({ message: 'Request processed successfully' });
       } catch (error) {
@@ -53,8 +59,9 @@ const tasksDelete = async(req, res = response) => {
       }
 }
 
-const tasksPut = async(req, res = response) => {
+const tasksPut = async(req, res = response,io) => {
   try {
+      // io.emit('message', 'Task updated');
 
       const {_id,status} =req.body
 
